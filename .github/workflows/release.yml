@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build Backend JAR
+      run: |
+        cd backend
+        mvn clean package -DskipTests
+
+    - name: Prepare Release Assets
+      run: |
+        mkdir release_assets
+        cp backend/target/*.jar release_assets/edgecase-backend.jar
+        cp frontend/Dockerfile release_assets/Frontend_Dockerfile
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          release_assets/edgecase-backend.jar
+          release_assets/Frontend_Dockerfile
+        generate_release_notes: true
