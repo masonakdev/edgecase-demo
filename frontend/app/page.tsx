@@ -3,7 +3,8 @@ import Link from "next/link";
 export default function HomePage() {
   return (
     <div className="max-w-5xl mx-auto py-12 px-4 space-y-10">
-      <section className="space-y-4">
+      <section className="space-y-4 relative">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-64 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background -z-10 blur-3xl" />
         <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
           BASE Incident Learning Hub
         </span>
@@ -31,7 +32,7 @@ export default function HomePage() {
           </Link>
           <Link
             href="/reports"
-            className="inline-flex items-center rounded-md border border-border/60 bg-background px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-card"
+            className="inline-flex items-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-card"
           >
             View reports
           </Link>

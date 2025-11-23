@@ -13,6 +13,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -406,7 +407,14 @@ export default function SubmitIncidentPage() {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormDescription
+                  className={
+                    form.formState.errors.summary ? "text-destructive" : ""
+                  }
+                >
+                  Summary must be at least 10 characters
+                </FormDescription>
+                <FormMessage className="hidden" />
               </FormItem>
             )}
           />

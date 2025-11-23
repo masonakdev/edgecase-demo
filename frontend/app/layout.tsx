@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="min-h-screen bg-slate-950 text-slate-50 antialiased">
+      <body className="min-h-screen bg-background text-foreground antialiased">
         <div className="min-h-screen flex flex-col">
           <header className="border-b border-border bg-card/80 backdrop-blur">
             <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
