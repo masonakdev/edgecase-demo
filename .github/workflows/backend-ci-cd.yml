@@ -52,6 +52,12 @@ jobs:
         cd backend
         mvn clean verify -DskipTests
 
+    - name: Upload Backend JAR
+      uses: actions/upload-artifact@v4
+      with:
+        name: edgecase-backend
+        path: backend/target/*.jar
+
   deploy:
     needs: build-and-test
     if: github.ref == 'refs/heads/main'
