@@ -7,7 +7,6 @@ import rip.edgecase.incidents.entity.IncidentEntity;
 import rip.edgecase.incidents.repository.IncidentRepository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Configuration
 public class DataInitializer {

@@ -34,11 +34,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/incidents/submit",
                                 "/api/incidents/public",
-                                "/api/reports/**"
-                        ).permitAll()
+                                "/api/reports/**")
+                        .permitAll()
                         .requestMatchers("/api/incidents/moderation/**").hasRole("MODERATOR")
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable);
 
@@ -52,9 +51,7 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of(
                 "https://edgecase.masonak.dev",
                 "https://edgecase-backend.masonak.dev",
-                "http://localhost:3000",
-                "https://working.d15tsgt5gqrlr2.amplifyapp.com"
-        ));
+                "http://localhost:3000"));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
