@@ -1,0 +1,105 @@
+services:
+
+  # PostgreSQL
+  db:
+    image: postgres:16
+    container_name: edgecase-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # Backend
+  backend:
+    image: public.ecr.aws/u8u9n1r7/edgecase-demo/backend:latest
+    container_name: edgecase-backend
+    restart: unless-stopped
+    environment:
+      VIRTUAL_HOST: ${BACKEND_SUBDOMAIN}.${DOMAIN_NAME}
+      VIRTUAL_PORT: 8080
+      LETSENCRYPT_HOST: ${BACKEND_SUBDOMAIN}.${DOMAIN_NAME}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+    depends_on:
+      - db
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  # Frontend
+  frontend:
+    image: public.ecr.aws/u8u9n1r7/edgecase-demo/frontend:latest
+    container_name: edgecase-frontend
+    restart: unless-stopped
+    environment:
+      VIRTUAL_HOST: ${FRONTEND_SUBDOMAIN}.${DOMAIN_NAME}
+      VIRTUAL_PORT: 80
+      LETSENCRYPT_HOST: ${FRONTEND_SUBDOMAIN}.${DOMAIN_NAME}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+      NEXT_PUBLIC_API_BASE_URL: https://${BACKEND_SUBDOMAIN}.${DOMAIN_NAME}
+    volumes:
+      - npm-cache:/root/.npm
+      - node-modules:/app/node_modules
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  # Nginx
+  nginx-proxy:
+    image: jwilder/nginx-proxy:alpine
+    container_name: edgecase-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+    labels:
+      - "com.github.nginx-proxy.nginx=true"
+    depends_on:
+      - backend
+      - frontend
+
+  # Let’s Encrypt
+  letsencrypt:
+    image: nginxproxy/acme-companion
+    container_name: edgecase-letsencrypt
+    restart: unless-stopped
+    depends_on:
+      - nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+    environment:
+      DEFAULT_EMAIL: ${LETSENCRYPT_EMAIL}
+      NGINX_PROXY_CONTAINER: edgecase-proxy
+
+  # Watchtower (auto-updates backend & frontend when new images appear)
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: edgecase-watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - WATCHTOWER_LABEL_ENABLE=true
+      - WATCHTOWER_POLL_INTERVAL=60
+      - DOCKER_API_VERSION=1.52
+    command: --cleanup edgecase-frontend edgecase-backend
+
+volumes:
+  pgdata:
+  certs:
+  vhost:
+  html:
+  npm-cache:
+  node-modules:

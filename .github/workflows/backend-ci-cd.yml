@@ -1,0 +1,84 @@
+name: Backend CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'backend/**'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'backend/**'
+
+env:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  POSTGRES_DB: edgecase
+  POSTGRES_USER: edgecase_user
+  POSTGRES_PASSWORD: edgecase_password
+  SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/edgecase
+  SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+  AWS_REGION: us-east-1
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: edgecase
+          POSTGRES_USER: edgecase_user
+          POSTGRES_PASSWORD: edgecase_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build with Maven
+      run: |
+        cd backend
+        mvn clean verify -DskipTests
+
+  deploy:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR Public
+      id: login-ecr-public
+      uses: aws-actions/amazon-ecr-login@v2
+      with:
+        registry-type: public
+
+    - name: Build, tag, and push docker image to Amazon ECR Public
+      env:
+        REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
+        REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $REGISTRY/$REPOSITORY/backend:latest -t $REGISTRY/$REPOSITORY/backend:$IMAGE_TAG backend/
+        docker push $REGISTRY/$REPOSITORY/backend:latest
+        docker push $REGISTRY/$REPOSITORY/backend:$IMAGE_TAG

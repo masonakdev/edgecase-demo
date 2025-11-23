@@ -1,0 +1,17 @@
+# local dev with volume
+services:
+  postgres:
+    image: postgres:16
+    container_name: edgecase-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: edgecase
+      POSTGRES_USER: edgecase_user
+      POSTGRES_PASSWORD: edgecase_password # DEV ONLY
+    ports:
+      - "5432:5432"
+    volumes:
+      - edgecase_pgdata:/var/lib/postgresql/data
+
+volumes:
+  edgecase_pgdata:
