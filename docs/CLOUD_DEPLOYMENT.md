@@ -21,9 +21,9 @@ AWS offers a cohesive ecosystem of services. By using **AWS ECR (Elastic Contain
 The application is fully containerized using **Docker**, ensuring consistency between the development and production environments. I implemented container images for both the backend and frontend services using multi-stage builds to optimize image size and security.
 
 ### Backend Image
-The backend is a Java Spring Boot application. Its Docker image is built using a single-stage approach:
-1.  **Base Image**: Uses `maven:3.9-eclipse-temurin-17` as the base image, which contains both the JDK and Maven.
-2.  **Build & Run**: The source code is copied into the container, and `mvn clean package` is executed to build the JAR file. The container then exposes port 8080 and runs the application using `java -jar`.
+The backend is a Java Spring Boot application. Its Docker image is built using a multi-stage approach:
+1.  **Build Stage**: Uses `maven:3.9-eclipse-temurin-17` to compile the Java code and package the application into a JAR file using `mvn clean package`.
+2.  **Runtime Stage**: Uses a lightweight `eclipse-temurin:17-jre-alpine` image. The JAR file created in the build stage is copied into this final image. This separation ensures that the Maven build tools and source code are not included in the production image, resulting in a smaller and more secure container.
 
 ### Frontend Image
 The frontend is a Next.js application. Its Docker image is also built using a multi-stage approach:
