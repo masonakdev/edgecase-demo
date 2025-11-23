@@ -31,7 +31,8 @@ graph TD
         ECR[AWS ECR<br/>Container Registry]
     end
 
-    User[User] -->|HTTPS/443| Nginx
+    User[User] -->|HTTPS/443| CF[Cloudflare]
+    CF -->|HTTPS/443| Nginx
     Nginx -->|HTTP/80| Frontend
     Nginx -->|HTTP/8080| Backend
     

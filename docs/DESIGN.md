@@ -26,6 +26,7 @@ The application follows a containerized microservices-like architecture orchestr
 
 ### 2.4 Infrastructure & Deployment
 - **Orchestration**: Docker Compose manages the service lifecycle.
+- **Edge Proxy**: Cloudflare provides DNS, CDN, and DDoS protection.
 - **Reverse Proxy**: `nginx-proxy` handles routing, virtual hosts, and SSL termination.
 - **SSL/TLS**: `acme-companion` automatically manages Let's Encrypt certificates.
 - **Auto-Updates**: `watchtower` monitors AWS ECR for new images and updates containers automatically.
@@ -50,7 +51,8 @@ graph TD
         ECR[AWS ECR<br/>Container Registry]
     end
 
-    User[User] -->|HTTPS/443| Nginx
+    User[User] -->|HTTPS/443| CF[Cloudflare]
+    CF -->|HTTPS/443| Nginx
     Nginx -->|HTTP/80| Frontend
     Nginx -->|HTTP/8080| Backend
     
