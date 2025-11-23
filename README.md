@@ -15,8 +15,7 @@
 ## System Architecture
 
 The application follows a containerized microservices architecture orchestrated by Docker Compose on AWS.
-
-```mermaid
+ BRUH
 graph TD
     subgraph AWS_Cloud [AWS Cloud]
         subgraph EC2_Instance [EC2 Instance]
