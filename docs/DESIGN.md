@@ -104,4 +104,3 @@ CORS is configured to allow requests from:
 - Local development: `http://localhost:3000`
 - Production frontend: `https://edgecase.masonak.dev`
 - Backend domain: `https://edgecase-backend.masonak.dev`
-- Staging/Working branches: `https://working.d15tsgt5gqrlr2.amplifyapp.com`
