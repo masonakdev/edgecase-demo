@@ -1,3 +1,11 @@
+<div align="center">
+
+![Backend CI/CD](https://github.com/masonakdev/edgecase-demo/actions/workflows/backend-ci-cd.yml/badge.svg)
+![Frontend CI/CD](https://github.com/masonakdev/edgecase-demo/actions/workflows/frontend-ci-cd.yml/badge.svg)
+
+</div>
+</br>
+
 # EdgeCase
 
 **EdgeCase** is a full-stack web application designed for reporting and viewing incidents related to BASE jumping. It serves as a centralized platform for the community to share safety information, analyze trends, and improve risk management.
