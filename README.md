@@ -2,6 +2,7 @@
 
 ![Backend CI/CD](https://github.com/masonakdev/edgecase-demo/actions/workflows/backend-ci-cd.yml/badge.svg)
 ![Frontend CI/CD](https://github.com/masonakdev/edgecase-demo/actions/workflows/frontend-ci-cd.yml/badge.svg)
+![Release](https://github.com/masonakdev/edgecase-demo/actions/workflows/release.yml/badge.svg)
 
 </div>
 
