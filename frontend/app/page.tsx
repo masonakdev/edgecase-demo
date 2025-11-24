@@ -10,7 +10,7 @@ export default function HomePage() {
         </span>
         <h1 className="text-3xl sm:text-4xl font-semibold">
           Capture incidents safely.
-          <br className="hidden sm:block" />
+          <br />
           Help the community learn.
         </h1>
         <p className="text-sm sm:text-base text-muted-foreground max-w-2xl">
