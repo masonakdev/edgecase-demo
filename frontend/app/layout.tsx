@@ -62,7 +62,17 @@ export default function RootLayout({
             </main>
             <footer className="border-t border-border bg-background/80">
               <div className="max-w-5xl mx-auto px-4 py-3 text-xs text-muted-foreground flex justify-between gap-2">
-                <span>© 2025 EdgeCase.</span>
+                <div className="flex gap-2">
+                  <span>© 2025 EdgeCase.</span>
+                  <a
+                    href="https://masonak.dev"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Built by Mason Wilcox.
+                  </a>
+                </div>
                 <span>For training and learning only.</span>
               </div>
             </footer>
