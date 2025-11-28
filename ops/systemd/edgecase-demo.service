@@ -1,0 +1,12 @@
+[Unit]
+Description=Login to AWS ECR Public and start Docker Compose stack
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash $HOME/edgecase-demo/ops/scripts/edgecase-demo.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
