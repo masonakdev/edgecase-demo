@@ -5,10 +5,8 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/bash /opt/edgecase/ops/scripts/ecr-login-compose.sh
+ExecStart=/usr/bin/bash $HOME/edgecase-demo/ops/scripts/edgecase-demo.sh
 RemainAfterExit=yes
-Environment="ECR_REGISTRY=public.ecr.aws/u8u9n1r7"
-Environment="ECR_REPO=edgecase-demo"
 
 [Install]
 WantedBy=multi-user.target
