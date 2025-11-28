@@ -1,7 +1,7 @@
 #!/bin/bash
-systemctl stop edgecase-demo
-systemctl disable edgecase-demo
-cp $HOME/edgecase-demo/ops/systemd/edgecase-demo.service /etc/systemd/system/
-systemctl daemon-reload
-systemctl enable edgecase-demo
-systemctl start edgecase-demo
+sudo systemctl stop edgecase-demo
+sudo systemctl disable edgecase-demo
+sudo cp $HOME/edgecase-demo/ops/systemd/edgecase-demo.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable edgecase-demo
+sudo systemctl start edgecase-demo

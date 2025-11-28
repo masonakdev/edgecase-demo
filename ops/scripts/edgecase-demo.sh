@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd $HOME/edgecase-demo
+cd /home/ubuntu/edgecase-demo
 
-docker compose -f docker-compose.prod.yml --env-file $HOME/edgecase-demo/.env up -d
+aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+
+docker compose -f docker-compose.prod.yml --env-file /home/ubuntu/edgecase-demo/.env up -d

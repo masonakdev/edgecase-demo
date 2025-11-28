@@ -1,5 +1,5 @@
 #!/bin/bash
-cp $HOME/edgecase-demo/ops/systemd/edgecase-demo.service /etc/systemd/system/
-systemctl daemon-reload
-systemctl enable edgecase-demo
-systemctl start edgecase-demo
+sudo cp $HOME/edgecase-demo/ops/systemd/edgecase-demo.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable edgecase-demo
+sudo systemctl start edgecase-demo
