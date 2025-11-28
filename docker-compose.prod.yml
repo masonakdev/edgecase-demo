@@ -83,7 +83,7 @@ services:
       DEFAULT_EMAIL: ${LETSENCRYPT_EMAIL}
       NGINX_PROXY_CONTAINER: edgecase-proxy
 
-  # Watchtower (auto-updates backend & frontend when new images appear)
+  # Watchtower
   watchtower:
     image: containrrr/watchtower:latest
     container_name: edgecase-watchtower
